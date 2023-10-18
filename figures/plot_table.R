@@ -324,11 +324,13 @@ df_example = tibble(
   exposed = c(0,0.1,0.25,0.5,1),
   s = c(0,0.25,0.5,0.75,1))
 ggplot(df_example,aes(x=s))+
-  geom_area(aes(y=reference),color='grey30',fill='grey30',alpha=0.3)+
+  geom_line(aes(y=reference))+
+  geom_ribbon(aes(ymax=reference,ymin=s),fill='grey30',alpha=0.3)+
   annotate("text",label='Reference population',x=0.375,y=0.675,color='grey30',angle=45,vjust=-1)+
-  geom_area(aes(y=s),linetype=2,color='black',fill='grey30',alpha=0.3)+
+  geom_line(aes(y=s),linetype=2)+
+  geom_ribbon(aes(ymax=s,ymin=exposed),fill='grey30',alpha=0.6)+
   annotate("text",label='Uniform exposure',x=0.5,y=0.5,angle=45,vjust=-1)+
-  geom_area(aes(y=exposed),color='dodgerblue4',fill='dodgerblue1')+
+  geom_line(aes(y=exposed),color='dodgerblue4')+
   annotate("text",label='Exposed population',x=0.675,y=0.375,color='dodgerblue4',angle=45,vjust=1)+
   coord_fixed()+
   annotate("text",x=0,y=1,label='(a)',hjust=0,vjust=1)+
@@ -378,7 +380,7 @@ cc_bg = cc_all %>% filter(version=='background')
 cc_present_0p5 = cc_all %>% filter(version=='present'&threshold==0.5)
 cc_present_3 = cc_all %>% filter(version=='present'&threshold==3)
 ggplot(cc_bg,aes(x=svi))+
-  geom_line(aes(y=cc,color='grey30'))+
+  geom_line(aes(y=cc,color='black'))+
   geom_line(aes(y=cc_present_0p5$cc,color='dodgerblue1'))+
   geom_line(aes(y=cc_present_3$cc,color='dodgerblue4'))+
   geom_line(aes(y=svi),linetype=2)+
@@ -386,8 +388,8 @@ ggplot(cc_bg,aes(x=svi))+
   coord_fixed()+
   labs(x='Social Vulnerability Score (s)',y='Cumulative Share of Population')+
   scale_color_manual(name=element_blank(),guide='legend',
-                     values=c('dodgerblue1'='dodgerblue1','dodgerblue4'='dodgerblue4','grey30'='grey30'),
-                     labels=c('Ex. > 0.5ft','Ex. > 3ft','Background'))+ 
+                     values=c('dodgerblue1'='dodgerblue1','dodgerblue4'='dodgerblue4','black'='black'),
+                     labels=c('Background','Ex. > 0.5ft','Ex. > 3ft'))+ 
   theme(legend.position=c(0.75,0.2),legend.background=element_rect(fill="transparent"))
 ggsave(path(plot_folder,'sii_present.png'),w=3,h=3)
 
